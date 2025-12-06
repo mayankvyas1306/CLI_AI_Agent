@@ -8,3 +8,5 @@ dist/
 build/
 coverage/
 *.local
+
+/src/generated/prisma
