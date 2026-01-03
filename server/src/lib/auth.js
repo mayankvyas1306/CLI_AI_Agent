@@ -7,6 +7,12 @@ export const auth = betterAuth({
         provider: "postgresql", 
     }),
     
+    //adding base path
+    basePath:"/api/auth",
+
+    //adding trusted origin
+    trustedOrigins:["http://localhost:3000"],
+
     //to add github auth
     socialProviders:{
         github:{

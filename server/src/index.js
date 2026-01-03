@@ -19,7 +19,7 @@ app.use(
   })
 );
 
-//for express v5
+//for express v5 this is route for auth
 app.all("/api/auth/*splat",toNodeHandler(auth));
 
 // Mount express json middleware after Better Auth handler
