@@ -1,0 +1,17 @@
+# backups
+client-backup/
+server-backup/
+backup/
+backups/
+
+# archives
+*.zip
+*.tar
+*.gz
+
+# dependencies
+node_modules/
+
+# env files
+.env
+.env.*
