@@ -34,6 +34,12 @@ app.get("/api/me", async (req, res) => {
 	return res.json(session);
 });
 
+//Now we have problem that we are redirecting to local host 3005 but our ui is at 3000 so we will use proxy to redirect to 3000
+app.get("/device",async(req,res)=>{
+  const {user_code} = req.query
+  res.redirect(`http://localhost:3000/device?user_code=${user_code}`)
+})
+
 app.get("/health",(req,res)=>{
     res.send("OK")
 })

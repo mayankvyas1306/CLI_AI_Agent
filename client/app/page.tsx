@@ -3,10 +3,21 @@ import { Button } from "@/components/ui/button"
 import { Spinner } from "@/components/ui/spinner"
 import { authClient } from "@/lib/auth-client"
 import { useRouter } from "next/navigation"
+import { useEffect } from "react"
 
 export default function Home() {
   const { data, isPending } = authClient.useSession()
   const router = useRouter()
+
+  useEffect(() => {
+  if (!isPending && !data?.session && !data?.user) {
+    router.push("/sign-in");
+  }
+}, [isPending, data, router]);
+
+if (!data?.session && !data?.user) {
+  return null;
+}
 
   if (isPending) {
     return (
@@ -16,9 +27,12 @@ export default function Home() {
     )
   }
 
-  if (!data?.session && !data?.user) {
-    router.push("/sign-in")
-  }
+  // if (!data?.session && !data?.user) {
+  //   router.push("/sign-in")
+  // }
+
+  
+
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background font-sans">
