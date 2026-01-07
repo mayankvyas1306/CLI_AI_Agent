@@ -3,5 +3,5 @@ dotenv.config();
 
 export const config = {
     googleApiKey : process.env.GOOGLE_GENERATIVE_AI_API_KEY || "",
-    model:process.enc.ORBITAL_MODEL || "gemini-2.5-flash"
+    model:process.env.ORBITAL_MODEL || "gemini-2.5-flash"
 }
