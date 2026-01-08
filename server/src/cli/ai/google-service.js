@@ -29,6 +29,15 @@ export class AIServices {
         messages: messages,
       };
 
+      if (tools && Object.keys(tools).length > 0) {
+        streamConfig.tools = tools;
+        streamConfig.maxSteps = 5; //Allow upto 5 tool call steps
+      }
+
+      console.log(
+        chalk.gray(`[DEBUG] Tools enabled: ${Object.keys(tools).join(", ")}`)
+      );
+
       const result = streamText(streamConfig);
 
       let fullResponse = "";
@@ -42,14 +51,38 @@ export class AIServices {
 
       const fullResult = result;
 
+      const toolCalls = [];
+      const toolResults = [];
+
+      if(fullResult.steps && Array.isArray(fullResult.steps)){
+        for(const step of fullResult.steps){
+          if(step.toolCalls && step.toolCalls.length>0){
+            for(const toolCall of step.toolCalls){
+              toolCalls.push(toolCall);
+
+              if(onToolCall){
+                onToolCall(toolCall)
+              }
+            }
+          }
+
+          if(step.toolResults && step.toolResults.length > 0){
+            toolResults.push(...step.toolResults)
+          }
+        }
+      }
+
       return {
         content: fullResponse,
         fnishedResponse: fullResult.finishReason,
         usage: fullResult.usage,
+        toolCalls,
+        toolResults,
+        steps:fullResult.steps
       };
     } catch (error) {
-        console.error(chalk.red("AI Service Error :"),error.message);
-        throw error;
+      console.error(chalk.red("AI Service Error :"), error.message);
+      throw error;
     }
   }
 
@@ -61,10 +94,13 @@ export class AIServices {
    */
   async getMessage(messages, tools = undefined) {
     let fullResponse = "";
-    const result = await this.sendMessage(messages, (chunk) => {
-      fullResponse += chunk;
-    }, tools);
+    const result = await this.sendMessage(
+      messages,
+      (chunk) => {
+        fullResponse += chunk;
+      },
+      tools
+    );
     return result.content;
   }
-
 }

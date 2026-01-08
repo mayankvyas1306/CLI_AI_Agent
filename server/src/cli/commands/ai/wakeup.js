@@ -5,6 +5,7 @@ import { getStoredToken } from "../../../lib/token.js";
 import prisma from "../../../lib/db.js";
 import { select } from "@clack/prompts";
 import { startChat } from "../../chat/chat-with-ai.js";
+import { startToolChat } from "../../chat/chat-with-ai-tools.js";
 // import { startChat } from "../../chat/chat-with-ai.js";
 // import { startToolChat } from "../../chat/chat-with-ai-tool.js";
 // import { startAgentChat } from "../../chat/chat-with-ai-agent.js";
@@ -69,7 +70,7 @@ const wakeUpAction = async () => {
       startChat("Chat");
       break;
     case "tool":
-      console.log('Tool is loading');
+      await startToolChat();
       break;
     case "agent":
       console.log('Agent mode coming soon');
