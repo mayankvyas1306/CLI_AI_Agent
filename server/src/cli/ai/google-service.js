@@ -54,20 +54,20 @@ export class AIServices {
       const toolCalls = [];
       const toolResults = [];
 
-      if(fullResult.steps && Array.isArray(fullResult.steps)){
-        for(const step of fullResult.steps){
-          if(step.toolCalls && step.toolCalls.length>0){
-            for(const toolCall of step.toolCalls){
+      if (fullResult.steps && Array.isArray(fullResult.steps)) {
+        for (const step of fullResult.steps) {
+          if (step.toolCalls && step.toolCalls.length > 0) {
+            for (const toolCall of step.toolCalls) {
               toolCalls.push(toolCall);
 
-              if(onToolCall){
-                onToolCall(toolCall)
+              if (onToolCall) {
+                onToolCall(toolCall);
               }
             }
           }
 
-          if(step.toolResults && step.toolResults.length > 0){
-            toolResults.push(...step.toolResults)
+          if (step.toolResults && step.toolResults.length > 0) {
+            toolResults.push(...step.toolResults);
           }
         }
       }
@@ -78,7 +78,7 @@ export class AIServices {
         usage: fullResult.usage,
         toolCalls,
         toolResults,
-        steps:fullResult.steps
+        steps: fullResult.steps,
       };
     } catch (error) {
       console.error(chalk.red("AI Service Error :"), error.message);
@@ -102,5 +102,28 @@ export class AIServices {
       tools
     );
     return result.content;
+  }
+  /**
+   * Generate Structures output using a Zod schema
+   * @param {Object} schema - Zod schema
+   * @param {string} prompt - Prompt for generation
+   * @returns {Promise<Object>} Parsed object matching the schema
+   */
+  async generateStructures(schema, prompt) {
+    try {
+      const result = await generateObject({
+        model: this.model,
+        schema: schema,
+        prompt: prompt,
+      });
+
+      return result.object;
+    } catch (error) {
+      console.error(
+        chalk.red("AI structured Generation Error:"),
+        error.message
+      );
+      throw error;
+    }
   }
 }
