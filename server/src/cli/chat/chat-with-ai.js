@@ -35,8 +35,11 @@ const aiService = new AIServices();
 const chatService = new ChatService();
 
 async function getUserFromToken() {
+
+  // getting token from TOKEN file in json format
   const token = await getStoredToken();
   
+  //if access_token is not there means if it is expired then ask user to login again
   if (!token?.access_token) {
     throw new Error("Not authenticated. Please run 'orbit login' first.");
   }
@@ -51,6 +54,7 @@ async function getUserFromToken() {
     },
   });
 
+  //if access token is not in db then ask user to login again
   if (!user) {
     spinner.error("User not found");
     throw new Error("User not found. Please login again.");
@@ -226,7 +230,7 @@ async function chatLoop(conversation) {
   
   
 
-    // Save user message
+    // Save user message in DB
     await saveMessage(conversation.id, "user", userInput);
 
     // Get messages count before AI response
@@ -248,15 +252,20 @@ export async function startChat(mode = "chat", conversationId = null) {
   try {
     // Display intro banner
     intro(
-      boxen(chalk.bold.cyan("🚀 Orbit AI Chat"), {
+      boxen(chalk.bold.cyan("🚀 Orbital AI Chat"), {
         padding: 1,
         borderStyle: "double",
         borderColor: "cyan",
       })
     );
 
+    //get user info from token available
     const user = await getUserFromToken();
+
+    //Use service to get/create conversation
     const conversation = await initConversation(user.id, conversationId, mode);
+
+    //Main Loop
     await chatLoop(conversation);
     
     // Display outro

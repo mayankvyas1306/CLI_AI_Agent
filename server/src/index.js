@@ -19,7 +19,8 @@ app.use(
   })
 );
 
-//for express v5 this is route for auth
+//Mount handler
+//for express v5 this is route handler for auth
 app.all("/api/auth/*splat",toNodeHandler(auth));
 
 // Mount express json middleware after Better Auth handler
@@ -40,10 +41,8 @@ app.get("/device",async(req,res)=>{
   res.redirect(`http://localhost:3000/device?user_code=${user_code}`)
 })
 
-app.get("/health",(req,res)=>{
-    res.send("OK")
-})
+
 
 app.listen(process.env.PORT,()=>{
     console.log(`Your application is running on https://localhost:${process.env.PORT}`);
-})
+}) 

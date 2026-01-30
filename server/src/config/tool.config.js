@@ -38,7 +38,7 @@ export function getEnabledTools(){
     try{
         for(const toolConfig of availableTools){
             if(toolConfig.enabled){
-                tools[toolConfig.if] = toolConfig.getTool()
+                tools[toolConfig.id] = toolConfig.getTool()
             }
         }
         // Debug logging

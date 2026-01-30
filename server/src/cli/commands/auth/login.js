@@ -6,11 +6,11 @@ import { storeToken, TOKEN_FILE } from "../../../lib/token.js";
 import chalk from "chalk";
 import { Command } from "commander";
 import fs from "node:fs/promises";
-import open from "open";
+import open from "open";// to open any link from cli
 import os from "os";
 import path from "path";
 import yoctoSpinner from "yocto-spinner";
-import * as z from "zod/v4";
+import * as z from "zod/v4"; // to verify the inputs
 import dotenv from "dotenv";
 import prisma from "../../../lib/db.js";
 import { log } from "node:console";
@@ -20,6 +20,8 @@ import { requireAuth } from "../../../lib/token.js";
 
 dotenv.config();
 
+
+//1.add the url, clientId which is github client Id
 const URL = "http://localhost:3005";
 const CLIENT_ID = process.env.GITHUB_CLIENT_ID;
 const CONFIG_DIR = path.join(os.homedir(), ".better-auth");
@@ -37,7 +39,7 @@ export async function loginAction(opts) {
   const clientId = options.clientId || CLIENT_ID;
   intro(chalk.redBright("Auth Cli Login"));
 
-  //TODO CHANGE THIS WITH TOKEN MANAGEMENT UTILS
+  //TOKEN MANAGEMENT UTILS
   const existingToken = await getStoredToken;
   const expired = await isTokenExpired;
 
@@ -129,6 +131,8 @@ export async function loginAction(opts) {
         )}minutes)...`
       )
     );
+
+    
     //getting the token
     const token = await pollForToken(
       authClient,

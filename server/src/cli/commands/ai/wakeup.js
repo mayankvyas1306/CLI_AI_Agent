@@ -7,9 +7,6 @@ import { select } from "@clack/prompts";
 import { startChat } from "../../chat/chat-with-ai.js";
 import { startToolChat } from "../../chat/chat-with-ai-tools.js";
 import { startAgentChat } from "../../chat/chat-with-ai-agent.js";
-// import { startChat } from "../../chat/chat-with-ai.js";
-// import { startToolChat } from "../../chat/chat-with-ai-tool.js";
-// import { startAgentChat } from "../../chat/chat-with-ai-agent.js";
 
 const wakeUpAction = async () => {
   const token = await getStoredToken();
@@ -61,7 +58,7 @@ const wakeUpAction = async () => {
       {
         value: "agent",
         label: "Agentic Mode",
-        hint: "Advanced AI agent (Coming soon)",
+        hint: "Advanced AI agent (generate web applications with AI CLI Agent)",
       },
     ],
   });

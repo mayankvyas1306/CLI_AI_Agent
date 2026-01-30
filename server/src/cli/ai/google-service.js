@@ -1,7 +1,8 @@
 import { google } from "@ai-sdk/google";
-import { convertToModelMessages, streamText } from "ai";
+import {  streamText } from "ai";
 import { config } from "../../config/google.config.js";
 import chalk from "chalk";
+import { generateObject } from "ai";
 
 export class AIServices {
   constructor() {
@@ -24,6 +25,7 @@ export class AIServices {
    */
   async sendMessage(messages, onChunk, tools = undefined, onToolCall = null) {
     try {
+      tools = tools ?? {};
       const streamConfig = {
         model: this.model,
         messages: messages,
@@ -35,9 +37,11 @@ export class AIServices {
       }
 
       console.log(
-        chalk.gray(`[DEBUG] Tools enabled: ${Object.keys(tools).join(", ")}`)
+        chalk.gray(`[DEBUG] Tools enabled: ${tools?Object.keys(tools).join(", "):"none"}`)
       );
 
+      //this will give us the result
+      //dont make it await because streaming need not to be await
       const result = streamText(streamConfig);
 
       let fullResponse = "";
@@ -49,12 +53,13 @@ export class AIServices {
         }
       }
 
-      const fullResult = result;
+      const fullResult = result.result? await result.result:null;
 
       const toolCalls = [];
       const toolResults = [];
 
-      if (fullResult.steps && Array.isArray(fullResult.steps)) {
+      //calling all the toolcall for all the steps
+      if (fullResult?.steps && Array.isArray(fullResult.steps)) {
         for (const step of fullResult.steps) {
           if (step.toolCalls && step.toolCalls.length > 0) {
             for (const toolCall of step.toolCalls) {
@@ -74,11 +79,11 @@ export class AIServices {
 
       return {
         content: fullResponse,
-        fnishedResponse: fullResult.finishReason,
-        usage: fullResult.usage,
+        finishResponse: fullResult?.finishReason??"stop",
+        usage: fullResult?.usage??null,
         toolCalls,
         toolResults,
-        steps: fullResult.steps,
+        steps: fullResult?.steps??[],
       };
     } catch (error) {
       console.error(chalk.red("AI Service Error :"), error.message);

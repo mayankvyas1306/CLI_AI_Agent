@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation"
 import { useEffect } from "react"
 
 export default function Home() {
+  // get data from auth client
   const { data, isPending } = authClient.useSession()
   const router = useRouter()
 

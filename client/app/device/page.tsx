@@ -26,6 +26,7 @@ export default function DeviceAuthorizationPage() {
       })
 
       if (response.data) {
+        // redirect to approve page
         router.push(`/approve?user_code=${formattedCode}`)
       }
     } catch (err) {

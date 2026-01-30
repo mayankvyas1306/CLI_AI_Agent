@@ -18,8 +18,6 @@ export default function DeviceApprovalPage() {
     deny: false,
   });
 
-  
-  
   if (isPending) {
     return (
       <div className="flex flex-col items-center justify-center h-screen bg-background">
@@ -28,20 +26,23 @@ export default function DeviceApprovalPage() {
     );
   }
 
-//   if(!data?.session && !data?.user){
-//     router.push("/sign-in");
-//     return null;
-//   }
+  //   if(!data?.session && !data?.user){
+  //     router.push("/sign-in");
+  //     return null;
+  //   }
   if (!data?.session && !data?.user) {
-  return (
-    <div className="flex min-h-screen items-center justify-center">
-      <Button onClick={() => router.push("/sign-in?next=/approve" + window.location.search)}>
-        Sign in to approve device
-      </Button>
-    </div>
-  );
-}
-
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <Button
+          onClick={() =>
+            router.push("/sign-in?next=/approve" + window.location.search)
+          }
+        >
+          Sign in to approve device
+        </Button>
+      </div>
+    );
+  }
 
   const handleApprove = async () => {
     setIsProcessing({ approve: true, deny: false });
@@ -88,20 +89,28 @@ export default function DeviceApprovalPage() {
               </div>
             </div>
             <div className="space-y-3">
-              <h1 className="text-3xl font-bold text-zinc-50">Device Authorization</h1>
-              <p className="text-sm text-zinc-400">A new device is requesting access to your account</p>
+              <h1 className="text-3xl font-bold text-zinc-50">
+                Device Authorization
+              </h1>
+              <p className="text-sm text-zinc-400">
+                A new device is requesting access to your account
+              </p>
             </div>
           </div>
           {/* Device Code Card */}
           <div className="border-2 border-dashed border-zinc-700 rounded-2xl p-6 bg-zinc-900/50 backdrop-blur-sm space-y-4">
             <div className="space-y-2">
-              <p className="text-xs font-semibold text-zinc-500 uppercase tracking-wide">Authorization Code</p>
+              <p className="text-xs font-semibold text-zinc-500 uppercase tracking-wide">
+                Authorization Code
+              </p>
               <div className="bg-zinc-800 rounded-lg p-4 border border-zinc-700">
                 <p className="text-xl font-mono font-bold text-cyan-400 text-center tracking-widest">
                   {userCode || "---"}
                 </p>
               </div>
-              <p className="text-xs text-zinc-600 text-center">Share this code with the requesting device</p>
+              <p className="text-xs text-zinc-600 text-center">
+                Share this code with the requesting device
+              </p>
             </div>
           </div>
           {/* Security Info Card */}
@@ -112,7 +121,8 @@ export default function DeviceApprovalPage() {
               </p>
               <div className="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
                 <p className="text-sm text-zinc-300">
-                  Only approve this request if you initiated it. For security, never share this code with others.
+                  Only approve this request if you initiated it. For security,
+                  never share this code with others.
                 </p>
               </div>
             </div>

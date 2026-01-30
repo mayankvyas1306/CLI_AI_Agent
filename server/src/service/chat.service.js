@@ -1,5 +1,4 @@
-
-import {auth} from "../lib/auth.js";
+import { auth } from "../lib/auth.js";
 import prisma from "../lib/db.js";
 
 export class ChatService {
@@ -9,8 +8,8 @@ export class ChatService {
    * @param {string} mode - chat, tool, or agent
    * @param {string} title - Optional conversation title
    */
-  async createConversation( userId , mode = "chat", title = null) {
-  
+  //creating new converstion in DB
+  async createConversation(userId, mode = "chat", title = null) {
     return await prisma.conversation.create({
       data: {
         userId,
@@ -27,6 +26,7 @@ export class ChatService {
    * @param {string} mode - chat, tool, or agent
    */
   async getOrCreateConversation(userId, conversationId = null, mode = "chat") {
+    // if conversations id is there then simply fetch it from DB
     if (conversationId) {
       const conversation = await prisma.conversation.findFirst({
         where: {
@@ -55,9 +55,8 @@ export class ChatService {
    */
   async addMessage(conversationId, role, content) {
     // Convert content to JSON string if it's an object
-    const contentStr = typeof content === "string" 
-      ? content 
-      : JSON.stringify(content);
+    const contentStr =
+      typeof content === "string" ? content : JSON.stringify(content);
 
     return await prisma.message.create({
       data: {
@@ -146,7 +145,10 @@ export class ChatService {
   formatMessagesForAI(messages) {
     return messages.map((msg) => ({
       role: msg.role,
-      content: typeof msg.content === "string" ? msg.content : JSON.stringify(msg.content),
+      content:
+        typeof msg.content === "string"
+          ? msg.content
+          : JSON.stringify(msg.content),
     }));
   }
 }
