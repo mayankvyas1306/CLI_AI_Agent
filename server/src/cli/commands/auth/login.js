@@ -40,8 +40,8 @@ export async function loginAction(opts) {
   intro(chalk.redBright("Auth Cli Login"));
 
   //TOKEN MANAGEMENT UTILS
-  const existingToken = await getStoredToken;
-  const expired = await isTokenExpired;
+  const existingToken = await getStoredToken();
+  const expired = await isTokenExpired();
 
   if (existingToken && !expired) {
     const shouldReAuth = await confirm({

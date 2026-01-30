@@ -48,12 +48,16 @@ app.get("/api/me", async (req, res) => {
 
 //Now we have problem that we are redirecting to local host 3005 but our ui is at 3000 so we will use proxy to redirect to 3000
 app.get("/device", async (req, res) => {
-  const { user_code } = req.query;
-  res.redirect(`http://localhost:3000/device?user_code=${user_code}`);
+ const { user_code } = req.query;
+  const frontendUrl = process.env.FRONTEND_URL;
+
+  if (!frontendUrl) {
+    return res.status(500).send("FRONTEND_URL not configured");
+  }
+
+  res.redirect(`${frontendUrl}/device?user_code=${user_code}`);
 });
 
 app.listen(process.env.PORT, () => {
-  console.log(
-    `Your application is running on https://localhost:${process.env.PORT}`,
-  );
+  console.log(`Server running on port ${process.env.PORT}`);
 });
